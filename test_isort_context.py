@@ -10,6 +10,10 @@ import tempfile
 import os
 import sys
 
+# Base repository path - update this if your repos are in a different location
+REPOS_BASE_PATH = "/Users/gang.zhang/repos"
+PROJECT_PATH = os.path.join(REPOS_BASE_PATH, "airflow")
+
 # Test imports that match your actual file
 TEST_IMPORTS = """import ast
 import datetime
@@ -62,26 +66,26 @@ def main():
     print("\n" + "=" * 80)
     print("TEST 2: WITH PROJECT CONTEXT (from your project)")
     print("=" * 80)
-    print("Running from /Users/gang.zhang/repos/airflow (detects pyproject.toml)")
+    print(f"Running from {PROJECT_PATH} (detects pyproject.toml)")
     print("-" * 80)
-    result2 = test_isort("with_context", "/Users/gang.zhang/repos/airflow")
+    result2 = test_isort("with_context", PROJECT_PATH)
     print(result2)
     print("\n✓ 'airflow' is separated after FIRSTPARTY imports")
     
     print("\n" + "=" * 80)
     print("TEST 3: EXPLICIT src_paths (simulating project context)")
     print("=" * 80)
-    print("Running from /tmp but with --src flag pointing to your project")
+    print(f"Running from /tmp but with --src flag pointing to your project")
     print("-" * 80)
     result3 = test_isort("explicit_src", "/tmp", 
-                        extra_args=['--src', '/Users/gang.zhang/repos/airflow'])
+                        extra_args=['--src', PROJECT_PATH])
     print(result3)
     print("\n✓ Same behavior as Test 2 - src_paths is the key!")
     
     print("\n" + "=" * 80)
     print("SUMMARY: WHAT IS PROJECT CONTEXT?")
     print("=" * 80)
-    print("""
+    print(f"""
 Project context = isort automatically detecting:
   1. Your project root (where pyproject.toml, setup.cfg, etc. are found)
   2. Setting 'src_paths' to include the project root
@@ -89,9 +93,9 @@ Project context = isort automatically detecting:
      - Modules under src_paths → FIRSTPARTY
      - Other modules → THIRDPARTY
 
-When isort runs from /Users/gang.zhang/repos/airflow:
+When isort runs from {PROJECT_PATH}:
   - It finds pyproject.toml
-  - Sets src_paths = ["/Users/gang.zhang/repos/airflow/src", "/Users/gang.zhang/repos/airflow"]
+  - Sets src_paths = ["{PROJECT_PATH}/src", "{PROJECT_PATH}"]
   - This affects how imports are grouped and ordered
 
 The effect: 'airflow' import gets separated because isort applies different
@@ -101,14 +105,14 @@ sorting rules when it knows about your project structure.
     print("\n" + "=" * 80)
     print("HOW TO TEST YOURSELF:")
     print("=" * 80)
-    print("""
+    print(f"""
 # 1. Test without context
 cd /tmp
-echo 'from airflow import X\nfrom moloco import Y' > test.py
+echo 'from airflow import X\\nfrom moloco import Y' > test.py
 isort --stdout test.py --profile black
 
 # 2. Test with context (from your project)
-cd /Users/gang.zhang/repos/airflow
+cd {PROJECT_PATH}
 isort --stdout test.py --profile black
 
 # 3. Check what isort detected
@@ -117,3 +121,4 @@ isort --show-config dags/moloco/operators/taskfnt.py | grep src_paths
 
 if __name__ == "__main__":
     main()
+
