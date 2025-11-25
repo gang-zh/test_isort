@@ -46,7 +46,7 @@ from moloco.utils.env import Env, get_env
 from airflow.models import BaseOperator
 
 
-✓ 'airflow' is separated after FIRSTPARTY imports
+✓ 'airflow' is separated after FIRSTPARTY and THIRDPARTY imports
 
 ================================================================================
 TEST 3: EXPLICIT src_paths (simulating project context)
@@ -87,7 +87,7 @@ When isort runs from /Users/gang.zhang/repos/airflow:
 
 The effect: 'airflow' import gets separated because isort applies different
 sorting rules when it knows about your project structure.
-    
+
 
 ================================================================================
 HOW TO TEST YOURSELF:
@@ -104,4 +104,4 @@ isort --stdout test.py --profile black
 
 # 3. Check what isort detected
 isort --show-config dags/moloco/operators/taskfnt.py | grep src_paths
-    ```
+```

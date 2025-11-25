@@ -70,7 +70,7 @@ def main():
     print("-" * 80)
     result2 = test_isort("with_context", PROJECT_PATH)
     print(result2)
-    print("\n✓ 'airflow' is separated after FIRSTPARTY imports")
+    print("\n✓ 'airflow' is separated after FIRSTPARTY and THIRDPARTY imports")
     
     print("\n" + "=" * 80)
     print("TEST 3: EXPLICIT src_paths (simulating project context)")
